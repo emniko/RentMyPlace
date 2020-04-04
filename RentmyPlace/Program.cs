@@ -12,6 +12,9 @@ namespace RentmyPlace
         static void Main(string[] args)
         {
             Console.WriteLine("==RENT MY PLACE==");
+            Console.Write("Enter the ID to delete listing: ");
+            string ID = Console.ReadLine();
+            Listing.DeleteListing(ID);
         }
     }
 }
