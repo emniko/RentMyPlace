@@ -1,0 +1,131 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+
+namespace RentmyPlace
+{
+    static class Listing
+    {
+        public static void AddListing()
+        {
+            if (!File.Exists(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt"))
+            {
+                Console.WriteLine("Listing File Not Found");
+            }
+            else
+            {
+                #region ListingVariables
+                int _listingID; string _listingAddress, _listingEndDate, _listingOwnerEmail; float _listingLastPrice;
+                #endregion
+                Console.WriteLine("Add Listing");
+                //We should change the listing ID to auto-increment
+                Console.Write("Enter ID:");
+                _listingID = int.Parse(Console.ReadLine());
+                Console.Write("Enter Address:");
+                _listingAddress = Console.ReadLine();
+                Console.Write("Enter End Date:");
+                _listingEndDate = Console.ReadLine();
+                Console.Write("Enter Last Price:");
+                _listingLastPrice = float.Parse(Console.ReadLine());
+                Console.Write("Enter Owner's Email:");
+                _listingOwnerEmail = Console.ReadLine();
+                StreamWriter sw = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt");
+                try
+                {
+                    sw.Write(_listingID + "\t" + _listingAddress + "\t" + _listingEndDate + "\t" + _listingLastPrice + "\t" + _listingOwnerEmail);
+                    sw.WriteLine();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    sw.Flush();
+                    sw.Close();
+                }
+            }
+        }
+        public static void ModifyListing(int ID)
+        {
+
+            int _lineToEdit = getLineNumber(ID) + 1; // Warning: 1-based indexing!
+            //Getting All the Lines
+            string[] lines = File.ReadAllLines(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt");
+
+            // Over writing The files
+            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt"))
+            {
+                for (int currentLine = 1; currentLine <= lines.Length; ++currentLine)
+                {
+                    if (currentLine == _lineToEdit)
+                    {
+                        #region ListingVariables
+                        string _listingAddress, _listingEndDate, _listingOwnerEmail; float _listingLastPrice;
+                        #endregion
+                        Console.WriteLine("Modify Listing Listing");
+                        //We should change the listing ID to auto-increment
+                        Console.Write("Enter Address:");
+                        _listingAddress = Console.ReadLine();
+                        Console.Write("Enter End Date:");
+                        _listingEndDate = Console.ReadLine();
+                        Console.Write("Enter Last Price:");
+                        _listingLastPrice = float.Parse(Console.ReadLine());
+                        Console.Write("Enter Owner's Email:");
+                        _listingOwnerEmail = Console.ReadLine();
+                        writer.WriteLine(ID +"\t" +_listingAddress + "\t" + _listingEndDate + "\t" + _listingLastPrice + "\t" + _listingOwnerEmail);
+                    }
+                    else
+                    {
+                        writer.WriteLine(lines[currentLine - 1]);
+                    }
+                }
+            }
+        }
+        public static void DeleteListing()
+        {
+
+        }
+        public static int getLineNumber(int ID)
+        {
+            int counter = 0;
+            string line;
+
+            // Read the file and display it line by line.
+            StreamReader file = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line.Contains(ID.ToString()))
+                {
+                    // Console.WriteLine(counter.ToString() + ": " + line);
+                    break;
+                }
+                counter++;
+            }
+            file.Close();
+            return counter;
+        }
+        
+        public static int  generateID()
+        {
+            int counter = 1;
+            string line;
+
+            // Read the file and display it line by line.
+            StreamReader file = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + @"\_Listing.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                counter++;
+            }
+            file.Close();
+            return counter;
+        }
+    }
+}
+ 
